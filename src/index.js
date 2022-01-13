@@ -10,6 +10,8 @@ const store = initStore();
 const App = () => {
 	const [storeState, setStoreState] = useState(store.getState());
 
+	console.log('state are', store.getState());
+
 	useEffect(() => {
 		store.subscribe(
 			() => setStoreState(store.getState())			

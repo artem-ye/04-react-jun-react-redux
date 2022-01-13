@@ -1,51 +1,72 @@
-const ACTION_TYPES = {
-    taskUpdated: 'taskUpdated',
-    taskDeleted: 'taskDeleted',
-};
+import { createSlice } from '@reduxjs/toolkit';
+
+// const ACTION_TYPES = {
+//     taskUpdated: 'taskUpdated',
+//     taskDeleted: 'taskDeleted',
+// };
+
+const INITIAL_STATE = [
+	{id: 1, title: 'Task 1', completed: false},
+	{id: 2, title: 'Task 2', completed: false},
+];
+
+// const deleteAction = createAction(ACTION_TYPES.taskDeleted);
+// const updateAction = createAction(ACTION_TYPES.taskUpdated);
+
+const taskSlice = createSlice({
+    name: 'task',
+    initialState: INITIAL_STATE,
+    reducers: {
+        update(state, action) {
+            const payload = action.payload;
+			const index = state.findIndex(e => e.id === payload.id);
+			if (index >= 0) {				                
+				state[index] = {...state[index], ...payload};	                				
+			}  
+        },
+        delete(state, action) {
+            return state.filter(task => task.id !== action.payload.id);
+        }
+    }
+});
+
+// const taskReducer = createReducer(INITIAL_STATE, (builder) => {
+//     builder
+//         .addCase(updateAction, (state, action) => {
+//             const payload = action.payload;
+// 			const index = state.findIndex(e => e.id === payload.id);
+// 			if (index >= 0) {				                
+// 				state[index] = {...state[index], ...payload};	                				
+// 			}     
+//         })
+//         .addCase(deleteAction, (state, action) => {
+//             // Oops!!! This way doesn't works here
+//             // state = state.filter(task => task.id !== action.payload.id);
+//             return state.filter(task => task.id !== action.payload.id);
+//         });
+// });
+
+const {reducer: taskReducer, actions: taskReducerActions} = taskSlice;
 
 function taskCompleted(taskId) {								
-    return{
-        type: ACTION_TYPES.taskUpdated, 
-        payload: {id: taskId, completed: true}
-    };
+    // return updateAction(
+    //     {id: taskId, completed: true}
+    // );
+    return taskReducerActions.update({id: taskId, completed: true});
 }
 
 function titleChanged(taskId, title) {
-    return{
-        type: ACTION_TYPES.taskUpdated, 
-        payload: {id: taskId, title: title}
-    };
+    // return updateAction(
+    //     {id: taskId, title: title}
+    // );
+    return taskReducerActions.update({id: taskId, title: title});
 }
 
 function taskDeleted(taskId) {
-    return{
-        type: ACTION_TYPES.taskDeleted, 
-        payload: {id: taskId}
-    };
-}
-
-function taskReducer(state, action) {
-	const {type, payload} =  action; 
-    let newState;   
-
-	switch(type) {		
-		case ACTION_TYPES.taskUpdated:
-			newState = [...state];
-			const index = newState.findIndex(e => e.id === payload.id);
-			if (index >= 0) {				                
-				newState[index] = {...newState[index], ...payload};	                
-				return newState;
-			}                    
-			break;
-        case ACTION_TYPES.taskDeleted:            
-            return state.filter(task => task.id !== payload.id);
-		default:
-			break;
-	}
-
-    console.log('State are', state);
-
-	return state;
+    // return deleteAction(
+    //     {id: taskId}
+    // );
+    return taskReducerActions.delete({id: taskId});
 }
 
 const actions = {
@@ -55,5 +76,13 @@ const actions = {
 export {
     taskReducer, actions
 };
+
+// console.log('slice', taskSlice);
+// console.log('actions',  taskSlice.actions);
+// console.log('reducers',  taskSlice.reducer);
+
+// console.log('slice', taskSlice);
+// console.log('t/actions',  taskReducerActions);
+// console.log('t/reducers',  taskReducer);
 
 export default taskReducer;

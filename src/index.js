@@ -1,29 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { createSore } from './store/createStore';
-import { ACTION_TYPES, taskReducer } from './store/taskReducer';
+import initStore from './store/store';
+import { actions } from './store/task';
 
-const INITIAL_STATE = [
-	{id: 1, title: 'Task 1', completed: false},
-	{id: 2, title: 'Task 2', completed: false},
-];
-const store = createSore(taskReducer, INITIAL_STATE);
+// import * as actions from './store/tasks/actions';
+
+const store = initStore();
 
 const App = () => {
 	const [storeState, setStoreState] = useState(store.getState());
 
 	useEffect(() => {
 		store.subscribe(
-			(newState) => setStoreState(newState)			
+			() => setStoreState(store.getState())			
 		);
 	}, []);
 
-	const completeTask = (taskId) => {								
-		store.dispatch({type: ACTION_TYPES.taskUpdated, payload: {id: taskId, completed: true}});
+	const completeTask = (taskId) => {										
+		store.dispatch(actions.taskCompleted(taskId));
 	};
 	
-	const changeTask = (taskId, title) => {
-		store.dispatch({type: ACTION_TYPES.taskUpdated, payload: {id: taskId, title: title}});
+	const changeTaskTitle = (taskId, title) => {
+		store.dispatch(actions.titleChanged(taskId, title));		
+	}
+
+	const deleteTask = (taskId) => {
+		store.dispatch(actions.taskDeleted(taskId));		
 	}
 	
 	return (
@@ -33,9 +35,12 @@ const App = () => {
 				<ul>
 					{storeState.map(task => 
 						<li key={task.id}>
-							ID: {task.id}; Task: {task.title}; Completed: {(task.completed && 'YES') || 'NO'}&nbsp;
-							<button onClick={() => completeTask(task.id)}>Done</button>&nbsp;
-							<button onClick={() => changeTask(task.id, task.title + ' updated')}>Update title</button>
+							ID: {task.id}; Task: {task.title}; Completed: {(task.completed && 'YES') || 'NO'}
+							<div>
+								<button onClick={() => completeTask(task.id)}>Done</button>&nbsp;
+								<button onClick={() => changeTaskTitle(task.id, task.title + ' updated')}>Update title</button>&nbsp;
+								<button onClick={() => deleteTask(task.id)}>Delete</button>
+							</div>
 							<hr/>
 						</li>
 					)}

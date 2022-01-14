@@ -1,22 +1,22 @@
-export function createSore(reducer, initialState) {
-	let state = initialState;
-	const listeners = [];
+// export function createSore(reducer, initialState) {
+// 	let state = initialState;
+// 	const listeners = [];
 
-	const getState = () => {
-		return state;
-	}
+// 	const getState = () => {
+// 		return state;
+// 	}
 
-	const dispatch = (action) => {		
-		state = reducer(state, action);
-		listeners.forEach(listener => listener(state));
-	}
+// 	const dispatch = (action) => {		
+// 		state = reducer(state, action);
+// 		listeners.forEach(listener => listener(state));
+// 	}
 
-	const subscribe = (listener) => {
-		listeners.push(listener);
-	}
+// 	const subscribe = (listener) => {
+// 		listeners.push(listener);
+// 	}
 
-	return {
-		getState, dispatch, subscribe
-	}
-};
+// 	return {
+// 		getState, dispatch, subscribe
+// 	}
+// };
 

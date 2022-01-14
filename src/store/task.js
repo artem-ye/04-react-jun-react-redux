@@ -34,8 +34,7 @@ const taskSlice = createSlice({
             state.isLoading = true;
         },
         taskRequestFailed(state, action) {            
-            state.isLoading = false;
-            // state.error = action.payload
+            state.isLoading = false;            
         }
     }
 });
@@ -71,7 +70,7 @@ const createTask = () => async (dispatch) => {
 }
 
 // ----------------------------------------------------------------------
-// Actions
+// Local state Actions
 // ----------------------------------------------------------------------
 
 

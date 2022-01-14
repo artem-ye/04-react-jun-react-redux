@@ -15,6 +15,10 @@ const taskSlice = createSlice({
             state.entities = action.payload;
             state.isLoading = false;
         },
+        taskCreated(state, action) {
+            state.entities.unshift(action.payload);
+            state.isLoading = false;
+        },
         update(state, action) {
             const payload = action.payload;
             const tasks = state.entities;
@@ -54,6 +58,18 @@ const loadTasks = () => async (dispatch) => {
     }        
 }
 
+const createTask = () => async (dispatch) => {    
+    dispatch(taskReducerActions.taskRequested());
+    try {
+        const data = await todoService.create();        
+        dispatch(taskReducerActions.taskCreated(data));
+    } catch (err) {
+        dispatch(taskReducerActions.taskRequestFailed(err.message));
+        dispatch(errorReducerActions.setError(err.message));
+        console.error('Unable to create new task on json placeholder. '+err.message);
+    }        
+}
+
 // ----------------------------------------------------------------------
 // Actions
 // ----------------------------------------------------------------------
@@ -85,7 +101,7 @@ const getTasks = (state) => state.tasks.entities;
 const getTasksIsLoading = (state) => state.tasks.isLoading;
 
 export {
-    taskReducer, actions, completeTask, loadTasks, getTasks, getTasksIsLoading
+    taskReducer, actions, completeTask, loadTasks, createTask, getTasks, getTasksIsLoading
 };
 
 export default taskReducer;

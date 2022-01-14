@@ -13,6 +13,15 @@ const todoService = {
         );
 
         return data;
+    },
+    create: async () => {
+        const { data } = await httpService.post(TODO_ENDPOINT, 
+            {                
+                title: 'New task',
+                completed: true
+            }           
+        );        
+        return data;
     }
 };
 

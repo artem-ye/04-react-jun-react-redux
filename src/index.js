@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { getError } from './store/errors';
 import configureStore from './store/store';
-import { actions, completeTask, getTasks, getTasksIsLoading, loadTasks } from './store/task';
+import { actions, completeTask, createTask, getTasks, getTasksIsLoading, loadTasks } from './store/task';
 
 const store = configureStore();
 
@@ -39,7 +39,7 @@ const App = () => {
 	return (
 		<>
 			<h1>React app</h1>	
-			<button onClick={() => console.log('Done')}>Add new task</button>	
+			<button onClick={() => dispatch(createTask())}>Add new task</button>	
 			<>
 				<ul>
 					{state.map(task => 
